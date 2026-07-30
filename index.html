@@ -357,6 +357,22 @@
     },800);
 
   });
+    function videoError() {
+    const video = document.getElementById("giftVideo");
+
+    console.log("Video error:", video.error);
+
+    if (video.error) {
+        alert(
+            "Video Error Code: " +
+            video.error.code +
+            "\n1 = Aborted" +
+            "\n2 = Network Error" +
+            "\n3 = Decode Error" +
+            "\n4 = Source Not Supported"
+        );
+    }
+}
   </script>
 </body>
 </html>
