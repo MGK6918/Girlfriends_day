@@ -1,1 +1,309 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Girlfriend's Day 💕</title>
+
+  <!-- Google Fonts: Outfit (modern aesthetic) & Sacramento (romantic script) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #f7ebe8;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      color: #4a3b40;
+      user-select: none;
+    }
+
+    /* Soft ambient background glows */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #e8b4b8; }
+    .glow-2 { bottom: -10%; right: -10%; width: 70vw; height: 70vw; background: #f4acb7; }
+
+    /* Page Container */
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(15px) scale(0.97);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Soft aesthetic dimming overlay for images */
+    .page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(45, 30, 35, 0.22);
+      backdrop-filter: blur(2px);
+      z-index: 1;
+    }
+
+    .page.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      z-index: 10;
+    }
+
+    #page1 { background-image: url('bg1.jpg'); }
+    #page2 { background-image: url('bg2.jpg'); }
+    #page3 { 
+      background: linear-gradient(145deg, #e8b4b8 0%, #eddcd2 100%); 
+    }
+    #page3::before { display: none; }
+
+    /* Aesthetic Frosted Glass Container */
+    .glass-container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 36px 26px;
+      box-shadow: 0 12px 40px rgba(61, 38, 42, 0.12),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+      max-width: 380px;
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    /* Header & Script Accent */
+    .script-title {
+      font-family: 'Sacramento', cursive;
+      font-size: 2.8rem;
+      color: #9d5c63;
+      margin-bottom: -6px;
+      line-height: 1.1;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #3d262a;
+      margin-bottom: 24px;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
+    }
+
+    /* Rewritten Letter Paragraphs */
+    .letter-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .letter-p {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #4a3b40;
+      font-weight: 400;
+      text-align: left;
+    }
+
+    .letter-p.highlight {
+      font-weight: 600;
+      color: #8b4a52;
+      text-align: center;
+      font-size: 1.05rem;
+      margin-top: 6px;
+    }
+
+    /* Soft Aesthetic Buttons */
+    .aesthetic-btn {
+      background: linear-gradient(135deg, #c97c85, #b86b74);
+      color: #ffffff;
+      border: none;
+      padding: 15px 34px;
+      font-size: 1.02rem;
+      font-weight: 500;
+      font-family: 'Outfit', sans-serif;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(201, 124, 133, 0.35);
+      transition: all 0.25s ease;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .aesthetic-btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 3px 10px rgba(201, 124, 133, 0.25);
+    }
+
+    /* Polaroid Video Card for Page 3 */
+    .polaroid-card {
+      position: relative;
+      z-index: 2;
+      background: #ffffff;
+      padding: 14px 14px 22px 14px;
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(61, 38, 42, 0.18);
+      max-width: 350px;
+      width: 100%;
+    }
+
+    .video-frame {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #111;
+      aspect-ratio: 9/16;
+      max-height: 52vh;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .polaroid-caption {
+      font-family: 'Sacramento', cursive;
+      font-size: 2.2rem;
+      color: #8b4a52;
+      margin-top: 12px;
+    }
+
+    /* Delicate Soft Heart Sparkles */
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      font-size: 18px;
+      animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      z-index: 999;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeUp {
+      0% { transform: scale(0.4) translateY(0); opacity: 0.9; }
+      100% { transform: scale(1.2) translateY(-35px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+
+  <!-- PAGE 1 -->
+  <div class="page active" id="page1">
+    <div class="glass-container">
+      <div class="script-title">a little surprise...</div>
+      <h1>Shall we unwrap your present?</h1>
+      <button class="aesthetic-btn" onclick="goToPage(2)">
+        Let's open it ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page" id="page2">
+    <div class="glass-container">
+      <div class="script-title">Happy Girlfriend's Day</div>
+      
+      <div class="letter-body">
+        <p class="letter-p">
+          Happy Girlfriend's Day to my pretty little baby 💕
+        </p>
+        <p class="letter-p">
+          I wish more than anything that I could hand these to you in person right now... Even though we're so close, it's still not quite possible just yet 🫠
+        </p>
+        <p class="letter-p">
+          I'm constantly holding onto the day when we can finally meet, laugh together, talk for hours, and just cherish having our time with each other.
+        </p>
+        <p class="letter-p highlight">
+          Enough of me pouring my heart out though... ready for your flowers? 🌸
+        </p>
+      </div>
+
+      <button class="aesthetic-btn" onclick="goToPage(3)">
+        Show me my flowers 💐
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page" id="page3">
+    <div class="polaroid-card">
+      <div class="video-frame">
+        <video id="giftVideo" controls playsinline loop preload="auto">
+          <source src="flowers.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="polaroid-caption">Maggie (my pretty cute girlfriend) 💕</div>
+    </div>
+  </div>
+
+  <script>
+    // Smooth Page Transition
+    function goToPage(pageNumber) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      const nextPage = document.getElementById('page' + pageNumber);
+      nextPage.classList.add('active');
+
+      // Video playback handling on Page 3
+      if (pageNumber === 3) {
+        const video = document.getElementById('giftVideo');
+        video.play().catch(err => {
+          console.log("Autoplay waiting for user tap:", err);
+        });
+      }
+    }
+
+    // Touch Sparkle Effect
+    window.addEventListener('click', function(e) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.innerHTML = ['✨', '🌸', '💕', '🌷'][Math.floor(Math.random() * 4)];
+      sparkle.style.left = (e.clientX - 10) + 'px';
+      sparkle.style.top = (e.clientY - 10) + 'px';
+      document.body.appendChild(sparkle);
+
+      setTimeout(() => sparkle.remove(), 1000);
+    });
+  </script>
+</body>
+</html>
