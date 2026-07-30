@@ -264,66 +264,98 @@
     </div>
   </div>
 
-  <!-- PAGE 3 -->
-  <div class="page" id="page3">
-    <div class="polaroid-card">
-      <div class="video-frame">
-        <video controls autoplay muted playsinline >
-           <!-- <video id="giftVideo" controls playsinline webkit-playsinline muted loop preload="auto"> -->
-          <source src='assets/flowers.mp4' type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="polaroid-caption">Maggie (my pretty cute girlfriend) 💕</div>
+  
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <div class="polaroid-card">
+    <div class="video-frame">
+      <video
+        id="giftVideo"
+        controls
+        playsinline
+        webkit-playsinline
+        preload="auto"
+        style="width:100%; border-radius:12px;"
+      >
+        <source src="./assets/flowers.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="polaroid-caption">
+      Maggie (my pretty cute girlfriend) 💕
     </div>
   </div>
+</div>
 
   <script>
-    // Bulletproof Page Switcher
-    function goToPage(pageNumber) {
-      // Hide all pages
-      var pages = document.querySelectorAll('.page');
-      for (var i = 0; i < pages.length; i++) {
-        pages[i].classList.remove('active');
-        pages[i].style.display = 'none';
-      }
+  function goToPage(pageNumber) {
 
-      // Display target page
-      var targetPage = document.getElementById('page' + pageNumber);
-      if (targetPage) {
-        targetPage.classList.add('active');
-        targetPage.style.display = 'flex';
-      }
+    // Hide all pages
+    document.querySelectorAll(".page").forEach(function(page){
+      page.classList.remove("active");
+      page.style.display = "none";
+    });
 
-      // Play video on Page 3
-      if (pageNumber === 3) {
-        var video = document.getElementById('giftVideo');
-        if (video) {
-          video.currentTime = 0;
-          video.muted = true;
-          var playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(function(err) {
-              console.log("Video play waiting for interaction:", err);
-            });
-          }
+    // Show selected page
+    var targetPage = document.getElementById("page" + pageNumber);
+
+    if(targetPage){
+      targetPage.classList.add("active");
+      targetPage.style.display = "flex";
+    }
+
+    // Automatically play video when Page 3 opens
+    if(pageNumber === 3){
+
+      const video = document.getElementById("giftVideo");
+
+      if(video){
+
+        video.pause();
+        video.currentTime = 0;
+
+        const promise = video.play();
+
+        if(promise !== undefined){
+          promise.then(function(){
+
+            console.log("Video playing");
+
+          }).catch(function(err){
+
+            console.log("Autoplay blocked:", err);
+
+            // Show controls so user can press Play
+            video.controls = true;
+
+          });
         }
       }
     }
+  }
 
-    // Touch Sparkle Effect
-    window.addEventListener('click', function(e) {
-      var sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.innerHTML = ['✨', '🌸', '💕', '🌷'][Math.floor(Math.random() * 4)];
-      sparkle.style.left = (e.clientX - 10) + 'px';
-      sparkle.style.top = (e.clientY - 10) + 'px';
-      document.body.appendChild(sparkle);
+  // Sparkle effect
+  window.addEventListener("click", function(e){
 
-      setTimeout(function() {
-        sparkle.remove();
-      }, 800);
-    });
+    const sparkle = document.createElement("div");
+
+    sparkle.className = "sparkle";
+
+    const icons = ["✨","💕","🌸","🌷"];
+
+    sparkle.innerHTML = icons[Math.floor(Math.random()*icons.length)];
+
+    sparkle.style.left = (e.clientX - 10) + "px";
+    sparkle.style.top = (e.clientY - 10) + "px";
+
+    document.body.appendChild(sparkle);
+
+    setTimeout(function(){
+      sparkle.remove();
+    },800);
+
+  });
   </script>
 </body>
 </html>
