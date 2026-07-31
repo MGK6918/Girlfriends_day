@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Happy Girlfriend's Day 💕</title>
 
-  <!-- Google Fonts: Outfit (modern aesthetic) & Sacramento (romantic script) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
@@ -27,7 +26,6 @@
       color: #4a3b40;
     }
 
-    /* Ambient Background Glows */
     .glow-orb {
       position: absolute;
       border-radius: 50%;
@@ -39,7 +37,6 @@
     .glow-1 { top: -10%; left: -10%; width: 60vw; height: 60vw; background: #e8b4b8; }
     .glow-2 { bottom: -10%; right: -10%; width: 70vw; height: 70vw; background: #f4acb7; }
 
-    /* Page Container - Bulletproof Display */
     .page {
       display: none;
       position: fixed;
@@ -68,7 +65,6 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* Subtle Dimming Overlay for Background Images */
     .page-overlay {
       position: absolute;
       top: 0;
@@ -79,7 +75,6 @@
       z-index: 1;
     }
 
-    /* Backgrounds with Aesthetic Fallback Colors */
     #page1 {
       background-color: #f4acb7;
       background-image: url('bg1.jpg');
@@ -90,11 +85,10 @@
       background-image: url('bg2.jpg');
     }
 
-    #page3 { 
-      background: linear-gradient(145deg, #e8b4b8 0%, #eddcd2 100%); 
+    #page3 {
+      background: linear-gradient(145deg, #e8b4b8 0%, #eddcd2 100%);
     }
 
-    /* Glass Container */
     .glass-container {
       position: relative;
       z-index: 5;
@@ -170,7 +164,6 @@
       transform: scale(0.96);
     }
 
-    /* Polaroid Video Card */
     .polaroid-card {
       position: relative;
       z-index: 5;
@@ -195,6 +188,32 @@
       max-height: 55vh;
       display: block;
       border-radius: 12px;
+      background: #000;
+    }
+
+    /* Tap-to-play overlay, shown only if autoplay is blocked or fails */
+    .tap-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.35);
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .tap-overlay.show { display: flex; }
+    .tap-overlay span {
+      background: rgba(255,255,255,0.9);
+      color: #8b4a52;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.95rem;
     }
 
     .polaroid-caption {
@@ -204,7 +223,6 @@
       margin-top: 10px;
     }
 
-    /* Sparkle Touch Effects */
     .sparkle {
       position: fixed;
       pointer-events: none;
@@ -221,7 +239,6 @@
 </head>
 <body>
 
-  <!-- Ambient Glow Backgrounds -->
   <div class="glow-orb glow-1"></div>
   <div class="glow-orb glow-2"></div>
 
@@ -242,7 +259,7 @@
     <div class="page-overlay"></div>
     <div class="glass-container">
       <div class="script-title">Happy Girlfriend's Day</div>
-      
+
       <div class="letter-body">
         <p class="letter-p">
           Happy Girlfriend's Day to my pretty little baby 💕
@@ -264,115 +281,114 @@
     </div>
   </div>
 
-  
-<!-- PAGE 3 -->
-<div class="page" id="page3">
-  <div class="polaroid-card">
-    <div class="video-frame">
-      <video
-        id="giftVideo"
-        controls
-        playsinline
-        
-        preload="metadata"
-        style="width:100%; border-radius:12px;"
-        onerror="videoError()"
-      >
-        <source src="assets/flowers.mp4?v2=2" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
+  <!-- PAGE 3 -->
+  <div class="page" id="page3">
+    <div class="polaroid-card">
+      <div class="video-frame">
+        <video
+          id="giftVideo"
+          controls
+          playsinline
+          webkit-playsinline="true"
+          preload="auto"
+          style="width:100%; border-radius:12px;"
+        >
+          <source src="assets/flowers.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="tap-overlay" id="tapOverlay" onclick="manualPlay()">
+          <span>▶ Tap to play</span>
+        </div>
+      </div>
 
-    <div class="polaroid-caption">
-      Maggie (my pretty cute girlfriend) 💕
+      <div class="polaroid-caption">
+        Maggie (my pretty cute girlfriend) 💕
+      </div>
     </div>
   </div>
-</div>
 
   <script>
-  function goToPage(pageNumber) {
+  const video = document.getElementById("giftVideo");
+  const tapOverlay = document.getElementById("tapOverlay");
 
-    // Hide all pages
+  // Debug logging — open your browser's console (F12 or remote debug on mobile)
+  // to see exactly why the video is failing.
+  video.addEventListener("loadedmetadata", () => console.log("Video metadata loaded, duration:", video.duration));
+  video.addEventListener("loadeddata", () => console.log("Video data loaded"));
+  video.addEventListener("canplay", () => console.log("Video can play"));
+  video.addEventListener("stalled", () => console.log("Video stalled (network/codec issue)"));
+  video.addEventListener("error", videoError);
+
+  function goToPage(pageNumber) {
     document.querySelectorAll(".page").forEach(function(page){
       page.classList.remove("active");
       page.style.display = "none";
     });
 
-    // Show selected page
     var targetPage = document.getElementById("page" + pageNumber);
-
-    if(targetPage){
+    if (targetPage) {
       targetPage.classList.add("active");
       targetPage.style.display = "flex";
     }
 
-    // Automatically play video when Page 3 opens
-    if(pageNumber === 3){
-
-      const video = document.getElementById("giftVideo");
-
-      if(video){
-
-        video.pause();
-        video.currentTime = 0;
-
-        const promise = video.play();
-
-        if(promise !== undefined){
-          promise.then(function(){
-
-            console.log("Video playing");
-
-          }).catch(function(err){
-
-            console.log("Autoplay blocked:", err);
-
-            // Show controls so user can press Play
-            video.controls = true;
-
-          });
-        }
-      }
+    if (pageNumber === 3) {
+      video.pause();
+      video.currentTime = 0;
+      video.load(); // force reload of the <source>, helps on some mobile browsers
+      attemptPlay();
     }
   }
 
-  // Sparkle effect
+  function attemptPlay() {
+    // First try unmuted (this click already counts as a user gesture)
+    video.muted = false;
+    const promise = video.play();
+
+    if (promise !== undefined) {
+      promise.then(() => {
+        console.log("Video playing unmuted");
+        tapOverlay.classList.remove("show");
+      }).catch((err) => {
+        console.log("Unmuted autoplay blocked, retrying muted:", err);
+        // Fallback: try muted autoplay, common workaround for stricter browsers
+        video.muted = true;
+        video.play().then(() => {
+          console.log("Video playing muted — showing tap-to-unmute");
+          tapOverlay.classList.add("show");
+          tapOverlay.querySelector("span").textContent = "🔇 Tap to unmute";
+        }).catch((err2) => {
+          console.log("Muted autoplay also blocked:", err2);
+          tapOverlay.classList.add("show");
+          tapOverlay.querySelector("span").textContent = "▶ Tap to play";
+        });
+      });
+    }
+  }
+
+  function manualPlay() {
+    video.muted = false;
+    video.play().catch((e) => console.log("Manual play failed:", e));
+    tapOverlay.classList.remove("show");
+  }
+
+  function videoError() {
+    console.log("Video error object:", video.error);
+    if (video.error) {
+      const codes = {1: "Aborted", 2: "Network Error", 3: "Decode Error (likely unsupported codec)", 4: "Source Not Supported (bad path or format)"};
+      alert("Video Error Code " + video.error.code + ": " + (codes[video.error.code] || "Unknown"));
+    }
+  }
+
   window.addEventListener("click", function(e){
-
     const sparkle = document.createElement("div");
-
     sparkle.className = "sparkle";
-
     const icons = ["✨","💕","🌸","🌷"];
-
     sparkle.innerHTML = icons[Math.floor(Math.random()*icons.length)];
-
     sparkle.style.left = (e.clientX - 10) + "px";
     sparkle.style.top = (e.clientY - 10) + "px";
-
     document.body.appendChild(sparkle);
-
-    setTimeout(function(){
-      sparkle.remove();
-    },800);
-
+    setTimeout(function(){ sparkle.remove(); }, 800);
   });
-    function videoError() {
-    const video = document.getElementById("giftVideo");
-
-    console.log("Video error:", video.error);
-
-    if (video.error) {
-        alert(
-            "Video Error Code: " +
-            video.error.code +
-            "\n1 = Aborted" +
-            "\n2 = Network Error" +
-            "\n3 = Decode Error" +
-            "\n4 = Source Not Supported"
-        );
-    }
-}
   </script>
 </body>
 </html>
